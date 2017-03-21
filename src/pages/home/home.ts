@@ -32,9 +32,12 @@ public path;
   }
 
   photoView(url) {
-    console.log(url);
+    alert(url);
     PhotoViewer.show(url);
   }
 
+  photoCombine() {
+    
+  }
 }
 

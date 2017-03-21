@@ -3,15 +3,20 @@
     <ion-title>
       Panorama Combine
     </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="photoCombine()">
+        <ion-icon name="cloud-upload"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <button ion-button clear (click)="photoView(img.uri)" *ngFor="let img of imgs">
-    <img width="40" height="40" src={{img.uri}} />
+  <button ion-button large clear (click)="photoView(img.uri)" *ngFor="let img of imgs">
+    <img width="60" height="60" src={{img.uri}} />
   </button>
   <!--img width="40" height="40" src={{image.uri}} (click)="photoView(img.uri)" *ngFor="let image of imgs" /-->
-  <button ion-button outline (click)="chooseWay()">
+  <button ion-button large outline (click)="chooseWay()">
     <ion-icon name="add"></ion-icon>
   </button>
 </ion-content>
