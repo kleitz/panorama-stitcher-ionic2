@@ -5,16 +5,12 @@ import { ImagePicker } from 'ionic-native';
 
 @Component({
   template: `
-    <ion-header>
-      <ion-list>
-      <button ion-item >Camera</button>
-      <button ion-item (click)="openAlbum()">Album</button>
-      </ion-list>
-    </ion-header>
-    <!--ion-content>
-    </ion-content-->
     <ion-footer>
-      <button ion-item (click)="goBack()">Cancel</button>
+      <ion-list>
+        <button ion-item >Camera</button>
+        <button ion-item (click)="openAlbum()">Album</button>
+      </ion-list>
+        <button ion-item (click)="goBack()">Cancel</button>
     </ion-footer>
   `
 })
