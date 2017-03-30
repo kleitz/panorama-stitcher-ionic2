@@ -1,3 +1,33 @@
 page-home {
 
 }
+
+ion-modal.show-page {
+  padding: 30px;
+  background: rgba(0,0,0,0.1);
+}
+.modal-wrapper {
+  position: absolute;
+  width: block;
+  height: 40vw;
+  top: 0; 
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  margin-bottom: 0;
+  border: 0;
+}
+
+
+.disabledfeature{
+  color: #8f8f8f;
+}
+
+.button-md {
+  text-transform: none;
+}
+
+.item-block {
+  text-align: center;
+}

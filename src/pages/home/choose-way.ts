@@ -6,17 +6,16 @@ import { ImagePicker } from 'ionic-native';
 @Component({
   template: `
     <ion-header>
-      <ion-navbar>
-        <ion-title>Login</ion-title>
-      </ion-navbar>
-    </ion-header>
-    <ion-content>
-    <ion-list>
+      <ion-list>
       <button ion-item >Camera</button>
       <button ion-item (click)="openAlbum()">Album</button>
+      </ion-list>
+    </ion-header>
+    <!--ion-content>
+    </ion-content-->
+    <ion-footer>
       <button ion-item (click)="goBack()">Cancel</button>
-    </ion-list>
-    </ion-content>
+    </ion-footer>
   `
 })
 export class ChooseWayPage {
