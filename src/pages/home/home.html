@@ -4,9 +4,9 @@
       Panorama Combine
     </ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="photoUpload()">
+      <!--button ion-button icon-only (click)="photoUpload()">
         <ion-icon name="cloud-upload"></ion-icon>
-      </button>
+      </button-->
       <button ion-button icon-only (click)="photoCombine()">
         <ion-icon name="arrow-dropright-circle"></ion-icon>
       </button>
@@ -18,11 +18,30 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-button large clear (click)="photoView(img.uri)" *ngFor="let img of imgs">
+  <!--button ion-button large clear (click)="photoView(img.uri)" *ngFor="let img of imgs">
     <img width="60" height="60" src={{img.uri}} />
-  </button>
-  <!--img width="40" height="40" src={{image.uri}} (click)="photoView(img.uri)" *ngFor="let image of imgs" /-->
-  <button ion-button large outline (click)="chooseWay()">
+  </button-->
+  <!--upload-list>
+  </upload-list-->
+  <button ion-button outline (click)="chooseWay()">
     <ion-icon name="add"></ion-icon>
   </button>
+  <ion-list>
+    <ion-item *ngFor="let image of images" >
+      <ion-thumbnail item-left *ngIf="image.thumbnailUrl">
+        <img src={{image.thumbnailUrl}}>
+      </ion-thumbnail>
+      <button ion-button outline item-right (click)="imageDelete(image)" *ngIf="image.isuploaded">Delete</button>
+      <ion-thumbnail item-left *ngIf="image.imageUrl">
+        <img src={{image.imageUrl}}>
+      </ion-thumbnail>
+      <!--progress value="{{image.progress}}" max="100" *ngIf="!image.isuploaded"></progress-->
+      <span *ngIf="!image.isuploaded">Progress: {{image.progress}}%</span>
+      <button ion-button outline item-right (click)="imageUpload(image)" *ngIf="!image.isuploaded">Upload</button>
+    </ion-item>
+   </ion-list>
+  <!--img width="40" height="40" src={{image.uri}} (click)="photoView(img.uri)" *ngFor="let image of imgs" /-->
+  <!--button ion-button large outline (click)="chooseWay()">
+    <ion-icon name="add"></ion-icon>
+  </button-->
 </ion-content>

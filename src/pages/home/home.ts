@@ -1,35 +1,88 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 
 import { NavController, NavParams, ModalController, LoadingController } from 'ionic-angular';
-import { PhotoViewer } from 'ionic-native';
+import { Http } from '@angular/http';
+import {Transfer} from 'ionic-native';
 
-import { Transfer, FileUploadOptions, TransferObject } from '@ionic-native/transfer';
-import { File } from '@ionic-native/file';
-import { HTTP } from '@ionic-native/http';
 import { Device } from '@ionic-native/device';
+
+import { PhotoViewer } from 'ionic-native';
 
 import { ChooseWayPage } from './choose-way';
 import { ViewPage } from '../view/view';
 
+import { UploadService } from './upload-service';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  providers: [Transfer, File, HTTP, Device]
+  providers: [ Device, Transfer, UploadService ]
 })
 export class HomePage {
 
-  public imgs = [
+  public images = [
   ];
-  public path;
-  public serverHost = 'http://192.168.0.4:3000';
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public loadingCtrl: LoadingController, private transfer: Transfer, private file: File, private http: HTTP, private device: Device) {}
+  public serverHost = 'http://192.168.0.8:3000';
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public loadingCtrl: LoadingController, private ngZone: NgZone, public uploadService: UploadService) {
+    this.loadImgs();
+  }
 
+  ionViewDidLoad() {
+
+  }
+
+  loadImgs() {
+    this.uploadService.get(this.serverHost + '/phoneupload').subscribe(result => {
+        console.log(result);
+        if (result.files) {
+          for (let i = 0; i < result.files.length; i++) {
+            this.images.push({thumbnailUrl: result.files[i].thumbnailUrl, deleteUrl: result.files[i].deleteUrl, isuploaded: true});
+          }
+        }
+      });
+  }
+
+  imageUpload(image) {
+    let onProgress = (progressEvent: ProgressEvent) => {
+      this.ngZone.run(() => {
+            if (progressEvent.lengthComputable) {
+                let progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+                console.log(progress);
+                image.progress = progress      
+            }
+        });
+    }
+
+    this.uploadService.upload(image.imageUrl, this.serverHost + '/phoneupload', onProgress).then(result => {
+      for (let i = 0; i < this.images.length; i++) {
+        if (this.images[i] == image) {
+          let data = JSON.parse(result);
+          console.log(data);
+          this.images.splice(i, 1, {thumbnailUrl: data.files[0].thumbnailUrl, deleteUrl: data.files[0].deleteUrl, isuploaded: true});              
+        }
+      }
+    });
+  }
+
+  imageDelete(image) {
+    this.uploadService.delete(image.deleteUrl).subscribe(result => {
+        console.log(result);
+        if (result.success) {
+ //         this.images.remove(image);
+          for (let i = 0; i < this.images.length; i++) {
+            if (this.images[i] == image) {
+              this.images.splice(i, 1);              
+            }
+          }
+        }
+      });
+  }
   chooseWay() {
     let modal = this.modalCtrl.create(ChooseWayPage);
     modal.onDidDismiss(data => {
       if (data) {
         for (let i = 0; i < data.length; i++) {
-          this.imgs.push({uri: data[i]});
+          this.images.push({imageUrl: data[i], isuploaded: false, progress: 0});
         }
       }
     });
@@ -41,72 +94,25 @@ export class HomePage {
 //    PhotoViewer.show(url);
   }
 
-  photoUpload() {
-    const fileTransfer: TransferObject = this.transfer.create();
-    for (let i = 0; i < this.imgs.length; i++) {
-      let url = this.imgs[i].uri;
-      let options: FileUploadOptions = {
-        fileKey: 'file',
-        fileName: url.substr(url.lastIndexOf('/')+1),
-        mimeType: 'image/jpeg',
-        headers: {'deviceuuid': this.device.uuid}
-      }
-      fileTransfer.upload(url, encodeURI(this.serverHost + '/phoneupload'), options)
-      .then((data) => {
-         // success
-      }, (err) => {
-        // error
-        alert("An error has occurred: Code = " + err.code);
-      })
-    }
-  }
   photoCombine() {
     let loading = this.loadingCtrl.create({
-//      spinner: 'hide',
       content: 'Combining...'
     });
     loading.present();
-    this.http.setHeader('deviceuuid', this.device.uuid);
-    console.log(this.serverHost + '/phonestitch');
-    this.http.get(this.serverHost + '/phonestitch', {}, {})
-      .then(data => {
-        let result = JSON.parse(data.data);
+    this.uploadService.get(this.serverHost + '/phonestitch').subscribe(result => {
         if (result.code == "no error" && result.stauts == "finish") {
-//          this.path = this.serverHost + result.view_path;
           this.panoramaView(this.serverHost + result.view_path);
         }else{
           alert(result.code);
         }
-          loading.dismiss();
-//        console.log(data.status);
-//        console.log(data.data); // data received by server
-//        console.log(data.headers);
-
-      })
-      .catch(error => {
         loading.dismiss();
-        console.log(error.status);
-        console.log(error.error); // error message as string
-        console.log(error.headers);
       });
   }
+
   panoramaView(viewPath) {
     this.navCtrl.push(ViewPage, {
       path: viewPath,
     });
-  }
-
-  presentLoadingDefault() {
-    let loading = this.loadingCtrl.create({
-      spinner: 'hide',
-      content: 'Please wait...'
-    });
-
-    loading.present();
-
-    setTimeout(() => {
-      loading.dismiss();
-    }, 5000);
   }
 }
 
