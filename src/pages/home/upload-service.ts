@@ -1,13 +1,12 @@
-import {Http, Headers, RequestOptions} from '@angular/http';
-import 'rxjs/add/operator/map'
-import {Transfer} from 'ionic-native';
-import {Component, Injectable} from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import 'rxjs/add/operator/map';
+import { Transfer } from 'ionic-native';
+import { Injectable } from '@angular/core';
 
 import { Device } from '@ionic-native/device';
 
 @Injectable()
 export class UploadService {
-    public serverHost = 'http://192.168.0.8:3000';
 
     constructor(private device: Device, private http: Http) {}
 
@@ -31,13 +30,12 @@ export class UploadService {
         }; 
         ft.onProgress(progress);
         return ft.upload(url, encodeURI(serverUrl), options, false)
-          .then((result: any) => result.response);
-/*        .then((result: any) => {
-            result.response;
-        }).catch((error: any) => {
+        .then((result: any) => result.response)
+        .catch((error: any) => {
             this.failed(error);
-        }); */
+        });
     }
+
     get = (url: string) => { 
       let headers = new Headers({ 'deviceuuid': this.device.uuid });
       let options = new RequestOptions({ headers: headers });

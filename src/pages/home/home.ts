@@ -1,8 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 
 import { NavController, NavParams, ModalController, LoadingController } from 'ionic-angular';
-import { Http } from '@angular/http';
-import {Transfer} from 'ionic-native';
+import { Transfer } from 'ionic-native';
 
 import { Device } from '@ionic-native/device';
 
@@ -13,6 +12,8 @@ import { ViewPage } from '../view/view';
 
 import { UploadService } from './upload-service';
 
+import { SERVER_URL } from './config';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
@@ -22,7 +23,7 @@ export class HomePage {
 
   public images = [
   ];
-  public serverHost = 'http://192.168.0.8:3000';
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public loadingCtrl: LoadingController, private ngZone: NgZone, public uploadService: UploadService) {
     this.loadImgs();
   }
@@ -32,13 +33,16 @@ export class HomePage {
   }
 
   loadImgs() {
-    this.uploadService.get(this.serverHost + '/phoneupload').subscribe(result => {
+    this.uploadService.get(SERVER_URL + '/phoneupload').subscribe(result => {
         console.log(result);
         if (result.files) {
           for (let i = 0; i < result.files.length; i++) {
             this.images.push({thumbnailUrl: result.files[i].thumbnailUrl, deleteUrl: result.files[i].deleteUrl, isuploaded: true});
           }
         }
+      }, err => {
+        console.log(err);
+        alert(err);
       });
   }
 
@@ -47,13 +51,12 @@ export class HomePage {
       this.ngZone.run(() => {
             if (progressEvent.lengthComputable) {
                 let progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-                console.log(progress);
                 image.progress = progress      
             }
         });
     }
 
-    this.uploadService.upload(image.imageUrl, this.serverHost + '/phoneupload', onProgress).then(result => {
+    this.uploadService.upload(image.imageUrl, SERVER_URL + '/phoneupload', onProgress).then(result => {
       for (let i = 0; i < this.images.length; i++) {
         if (this.images[i] == image) {
           let data = JSON.parse(result);
@@ -66,7 +69,6 @@ export class HomePage {
 
   imageDelete(image) {
     this.uploadService.delete(image.deleteUrl).subscribe(result => {
-        console.log(result);
         if (result.success) {
  //         this.images.remove(image);
           for (let i = 0; i < this.images.length; i++) {
@@ -75,6 +77,9 @@ export class HomePage {
             }
           }
         }
+      }, err => {
+        console.log(err);
+        alert(err);
       });
   }
   chooseWay() {
@@ -99,13 +104,18 @@ export class HomePage {
       content: 'Combining...'
     });
     loading.present();
-    this.uploadService.get(this.serverHost + '/phonestitch').subscribe(result => {
+    this.uploadService.get(SERVER_URL + '/phonestitch').subscribe(result => {
+        console.log(result);
         if (result.code == "no error" && result.stauts == "finish") {
-          this.panoramaView(this.serverHost + result.view_path);
+          this.panoramaView(SERVER_URL + result.view_path);
         }else{
-          alert(result.code);
+          alert(result.stauts);
         }
         loading.dismiss();
+      }, err => {
+        loading.dismiss();
+        console.log(err);
+        alert(err);
       });
   }
 

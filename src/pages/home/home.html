@@ -36,7 +36,7 @@
         <img src={{image.imageUrl}}>
       </ion-thumbnail>
       <!--progress value="{{image.progress}}" max="100" *ngIf="!image.isuploaded"></progress-->
-      <span *ngIf="!image.isuploaded">Progress: {{image.progress}}%</span>
+      <span *ngIf="!image.isuploaded" [hidden]="image.progress == 0" >Progress: {{image.progress}}%</span>
       <button ion-button outline item-right (click)="imageUpload(image)" *ngIf="!image.isuploaded">Upload</button>
     </ion-item>
    </ion-list>
