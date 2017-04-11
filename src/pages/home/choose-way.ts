@@ -24,14 +24,12 @@ export class ChooseWayPage {
   openCamera() {
     const options: CameraOptions = {
       quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
+      destinationType: this.camera.DestinationType.NATIVE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     }
     this.camera.getPicture(options).then((result) => {
-      console.log(result);
       let data = [result];
-      console.log(data);
       this.viewCtrl.dismiss(data);
     }, (err) => {
     // Handle error
