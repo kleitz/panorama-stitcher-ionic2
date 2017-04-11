@@ -4,10 +4,7 @@
       Panorama Combine
     </ion-title>
     <ion-buttons end>
-      <!--button ion-button icon-only (click)="photoUpload()">
-        <ion-icon name="cloud-upload"></ion-icon>
-      </button-->
-      <button ion-button icon-only (click)="photoCombine()">
+      <button ion-button icon-only (click)="imageCombine()">
         <ion-icon name="arrow-dropright-circle"></ion-icon>
       </button>
       <!--button ion-button icon-only (click)="panoramaView()">
@@ -26,14 +23,20 @@
   <button ion-button outline (click)="chooseWay()">
     <ion-icon name="add"></ion-icon>
   </button>
+  <button ion-button outline (click)="imagesUpload()">
+    <ion-icon name="cloud-upload"></ion-icon>
+  </button>
+    <button ion-button outline (click)="imagesDelete()">
+    <ion-icon name="trash"></ion-icon>
+  </button>
   <ion-list>
     <ion-item *ngFor="let image of images" >
       <ion-thumbnail item-left *ngIf="image.thumbnailUrl">
-        <img src={{image.thumbnailUrl}}>
+        <img src={{image.thumbnailUrl}} (click)="imageView(image.url)">
       </ion-thumbnail>
       <button ion-button outline item-right (click)="imageDelete(image)" *ngIf="image.isuploaded">Delete</button>
       <ion-thumbnail item-left *ngIf="image.imageUrl">
-        <img src={{image.imageUrl}}>
+        <img src={{image.imageUrl}} (click)="imageView(image.imageUrl)">
       </ion-thumbnail>
       <!--progress value="{{image.progress}}" max="100" *ngIf="!image.isuploaded"></progress-->
       <span *ngIf="!image.isuploaded" [hidden]="image.progress == 0" >Progress: {{image.progress}}%</span>

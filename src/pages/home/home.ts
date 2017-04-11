@@ -4,8 +4,7 @@ import { NavController, NavParams, ModalController, LoadingController } from 'io
 import { Transfer } from 'ionic-native';
 
 import { Device } from '@ionic-native/device';
-
-import { PhotoViewer } from 'ionic-native';
+import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 import { ChooseWayPage } from './choose-way';
 import { ViewPage } from '../view/view';
@@ -17,14 +16,14 @@ import { SERVER_URL } from './config';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  providers: [ Device, Transfer, UploadService ]
+  providers: [ Device, Transfer, PhotoViewer, UploadService ]
 })
 export class HomePage {
 
   public images = [
   ];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public loadingCtrl: LoadingController, private ngZone: NgZone, public uploadService: UploadService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public loadingCtrl: LoadingController, private ngZone: NgZone, private photoViewer: PhotoViewer, public uploadService: UploadService) {
     this.loadImgs();
   }
 
@@ -37,7 +36,7 @@ export class HomePage {
         console.log(result);
         if (result.files) {
           for (let i = 0; i < result.files.length; i++) {
-            this.images.push({thumbnailUrl: result.files[i].thumbnailUrl, deleteUrl: result.files[i].deleteUrl, isuploaded: true});
+            this.images.push({thumbnailUrl: result.files[i].thumbnailUrl, deleteUrl: result.files[i].deleteUrl, url:result.files[i].url, isuploaded: true});
           }
         }
       }, err => {
@@ -61,7 +60,7 @@ export class HomePage {
         if (this.images[i] == image) {
           let data = JSON.parse(result);
           console.log(data);
-          this.images.splice(i, 1, {thumbnailUrl: data.files[0].thumbnailUrl, deleteUrl: data.files[0].deleteUrl, isuploaded: true});              
+          this.images.splice(i, 1, {thumbnailUrl: data.files[0].thumbnailUrl, deleteUrl: data.files[0].deleteUrl, url: data.files[0].url, isuploaded: true});              
         }
       }
     });
@@ -94,12 +93,11 @@ export class HomePage {
     modal.present();
   }
 
-  photoView(url) {
-//    alert(url);
-//    PhotoViewer.show(url);
+  imageView(url) {
+    this.photoViewer.show(url);
   }
 
-  photoCombine() {
+  imageCombine() {
     let loading = this.loadingCtrl.create({
       content: 'Combining...'
     });
@@ -109,7 +107,7 @@ export class HomePage {
         if (result.code == "no error" && result.stauts == "finish") {
           this.panoramaView(SERVER_URL + result.view_path);
         }else{
-          alert(result.stauts);
+          alert(result.code);
         }
         loading.dismiss();
       }, err => {
@@ -123,6 +121,25 @@ export class HomePage {
     this.navCtrl.push(ViewPage, {
       path: viewPath,
     });
+  }
+
+  imagesUpload() {
+    for (let i = 0; i < this.images.length; i++) {
+      if (!this.images[i].isuploaded) {
+        this.imageUpload(this.images[i]);
+      }
+    }
+  }
+
+  imagesDelete() {
+    for (let i = 0; i < this.images.length; i++) {
+      if (this.images[i].isuploaded) {
+        this.imageDelete(this.images[i]);
+      }
+      else {
+        this.images.splice(i, 1);
+      }
+    }
   }
 }
 
