@@ -38,10 +38,10 @@ export class ChooseWayPage {
 
   openAlbum() {
     var options = {
-      maximumImagesCount: 15,
-      quality: 50,
-      width:100,
-      height:100,
+      maximumImagesCount: 20,
+      quality: 100,
+//      width:1000,
+//      height:1000,
       outputType: 0
     }
     if (!ImagePicker.hasReadPermission()) {

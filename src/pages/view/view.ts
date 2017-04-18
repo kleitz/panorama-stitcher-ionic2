@@ -87,7 +87,7 @@ export class ViewPage {
 		if ( this.isUserInteracting === true ) {
       let touch = event.targetTouches[0];
 			this.lon = ( this.onTouchStartTouchX - touch.clientX ) * 0.1 + this.onTouchStartLon;
-			this.lat = ( touch.clientY - this.onTouchStartTouchY ) * 0.1 + this.onTouchStartLat;
+//			this.lat = ( touch.clientY - this.onTouchStartTouchY ) * 0.1 + this.onTouchStartLat;
 		}
 	}
 
