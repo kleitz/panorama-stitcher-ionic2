@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { NavController, NavParams, ModalController, LoadingController } from 'ionic-angular';
-import { Transfer, Splashscreen } from 'ionic-native';
+import { Transfer } from 'ionic-native';
 
 import { Device } from '@ionic-native/device';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
@@ -41,10 +41,8 @@ export class HomePage {
             this.images.push({thumbnailUrl: result.files[i].thumbnailUrl, deleteUrl: result.files[i].deleteUrl, url:result.files[i].url, isuploaded: true});
           }
         }
-        Splashscreen.hide();
       }, err => {
         console.log(err);
-        Splashscreen.hide();
         alert(err);
       });
   }
