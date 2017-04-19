@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
-
+import { Platform } from 'ionic-angular';
 import { NavController, NavParams, ModalController, LoadingController } from 'ionic-angular';
-import { Transfer } from 'ionic-native';
+import { Transfer, Splashscreen } from 'ionic-native';
 
 import { Device } from '@ionic-native/device';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
@@ -23,8 +23,10 @@ export class HomePage {
   public images = [
   ];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public loadingCtrl: LoadingController, private ngZone: NgZone, private photoViewer: PhotoViewer, public uploadService: UploadService) {
-    this.loadImgs();
+  constructor(platform: Platform, public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public loadingCtrl: LoadingController, private ngZone: NgZone, private photoViewer: PhotoViewer, public uploadService: UploadService) {
+    platform.ready().then(() => {
+      this.loadImgs();
+    });
   }
 
   ionViewDidLoad() {
@@ -39,8 +41,10 @@ export class HomePage {
             this.images.push({thumbnailUrl: result.files[i].thumbnailUrl, deleteUrl: result.files[i].deleteUrl, url:result.files[i].url, isuploaded: true});
           }
         }
+        Splashscreen.hide();
       }, err => {
         console.log(err);
+        Splashscreen.hide();
         alert(err);
       });
   }

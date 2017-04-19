@@ -40,8 +40,6 @@ export class ChooseWayPage {
     var options = {
       maximumImagesCount: 20,
       quality: 100,
-//      width:1000,
-//      height:1000,
       outputType: 0
     }
     if (!ImagePicker.hasReadPermission()) {
