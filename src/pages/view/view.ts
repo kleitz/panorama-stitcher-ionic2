@@ -59,8 +59,6 @@ export class ViewPage {
 		container.addEventListener( 'touchcancel', this.onTouchEnd, false );
 		container.addEventListener( 'touchleave', this.onTouchEnd, false );
 //		container.addEventListener( 'wheel', this.onDocumentMouseWheel, false );
-
-//		window.addEventListener( 'resize', this.onWindowResize, false );
 	}
 
 	onWindowResize = () => {

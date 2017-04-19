@@ -7,19 +7,11 @@
       <button ion-button icon-only (click)="imageCombine()">
         <ion-icon name="arrow-dropright-circle"></ion-icon>
       </button>
-      <!--button ion-button icon-only (click)="panoramaView()">
-        <ion-icon name="eye"></ion-icon>
-      </button-->
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <!--button ion-button large clear (click)="photoView(img.uri)" *ngFor="let img of imgs">
-    <img width="60" height="60" src={{img.uri}} />
-  </button-->
-  <!--upload-list>
-  </upload-list-->
   <button ion-button outline (click)="chooseWay()">
     <ion-icon name="add"></ion-icon>
   </button>
@@ -43,8 +35,4 @@
       <button ion-button outline item-right (click)="imageUpload(image)" *ngIf="!image.isuploaded">Upload</button>
     </ion-item>
    </ion-list>
-  <!--img width="40" height="40" src={{image.uri}} (click)="photoView(img.uri)" *ngFor="let image of imgs" /-->
-  <!--button ion-button large outline (click)="chooseWay()">
-    <ion-icon name="add"></ion-icon>
-  </button-->
 </ion-content>
