@@ -24,6 +24,7 @@ export class ViewPage {
   constructor(public navCtrl: NavController, public params: NavParams) {}
 
   ionViewDidLoad() {
+    console.log("ViewDidLoad");
     this.init();
     this.animate();
   }
@@ -38,7 +39,7 @@ export class ViewPage {
 		geometry.scale( - 1, 1, 1 );
 
 		let material = new THREE.MeshBasicMaterial( {
-			map: new THREE.TextureLoader().load( this.params.get('path') )
+			map: new THREE.TextureLoader().load( this.params.get('path') + "?" + Math.random() )
 		} );
 
 		let mesh;
