@@ -8,7 +8,7 @@ import { ImagePicker } from 'ionic-native';
   template: `
     <ion-footer>
       <ion-list>
-        <button ion-item (click)="openCamera()">Camera</button>
+        <!--button ion-item (click)="openCamera()">Camera</button-->
         <button ion-item (click)="openAlbum()">Album</button>
       </ion-list>
         <button ion-item (click)="goBack()">Cancel</button>

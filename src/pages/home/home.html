@@ -14,12 +14,15 @@
 <ion-content padding>
   <button ion-button outline (click)="chooseWay()">
     <ion-icon name="add"></ion-icon>
+    Add
   </button>
   <button ion-button outline (click)="imagesUpload()">
     <ion-icon name="cloud-upload"></ion-icon>
+    Upload
   </button>
     <button ion-button outline (click)="imagesDelete()">
     <ion-icon name="trash"></ion-icon>
+    Delete
   </button>
   <ion-list>
     <ion-item *ngFor="let image of images" >
