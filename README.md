@@ -10,5 +10,5 @@
 ### Start
 
 1. Modify the sever url(src/pages/home/config.ts)
-2. 'ionic platform add android' for andriod device
-3. 'ionic run android --prod --device' for andriod device
+2. `ionic platform add android` for andriod device
+3. `ionic run android --prod --device` for andriod device
